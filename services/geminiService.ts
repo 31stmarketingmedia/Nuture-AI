@@ -1,0 +1,96 @@
+import { GoogleGenAI, Type } from "@google/genai";
+import { Activity } from '../types';
+
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
+const responseSchema = {
+  type: Type.ARRAY,
+  items: {
+    type: Type.OBJECT,
+    properties: {
+      name: {
+        type: Type.STRING,
+        description: 'A short, catchy name for the activity.',
+      },
+      description: {
+        type: Type.STRING,
+        description: 'A brief, one-sentence description of the activity and its purpose.',
+      },
+      materials: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.STRING,
+        },
+        description: 'A list of simple, common household items needed. If none, return an empty array.',
+      },
+      instructions: {
+        type: Type.ARRAY,
+        items: {
+          type: Type.STRING,
+        },
+        description: 'A list of clear, step-by-step instructions for the parent to follow.',
+      },
+      developmentalBenefit: {
+        type: Type.STRING,
+        description: 'A brief explanation of how this activity specifically supports the chosen developmental area, especially considering any special needs.',
+      },
+    },
+    required: ['name', 'description', 'materials', 'instructions', 'developmentalBenefit'],
+  },
+};
+
+
+export const generateActivities = async (ageYears: string, ageMonths: string, skill: string, specialNeeds: string): Promise<Activity[]> => {
+  const skillLabel = skill.replace(/-/g, ' ');
+
+  let ageDescription = '';
+  const years = parseInt(ageYears, 10) || 0;
+  const months = parseInt(ageMonths, 10) || 0;
+
+  if (years > 0 && months > 0) {
+    ageDescription = `${years} year(s) and ${months} month(s) old`;
+  } else if (years > 0) {
+    ageDescription = `${years} year(s) old`;
+  } else {
+    ageDescription = `${months} month(s) old`;
+  }
+  
+  let prompt = `
+    You are an expert in childhood development, specializing in inclusive activities for children aged 0-12.
+    Generate a list of 4 simple, fun, safe, and age-appropriate developmental activities for a child who is ${ageDescription}.
+    The activities should focus on improving their ${skillLabel} skills and be easy to integrate into a daily routine.
+  `;
+
+  if (specialNeeds && specialNeeds.trim() !== '') {
+    prompt += `
+      \nIMPORTANT SPECIAL CONSIDERATION: This child has the following needs: "${specialNeeds}".
+      You MUST tailor the activities to be suitable and beneficial for a child with these specific needs. 
+      For example, for a visually impaired child, focus on sensory activities involving touch and sound. For a child with motor skill challenges, suggest adaptive ways to perform tasks like using larger objects.
+      Ensure your suggestions are sensitive, supportive, and empowering. The "developmentalBenefit" must also address how the activity helps considering these needs.
+    `;
+  }
+
+  prompt += `
+    For each activity, include a brief explanation highlighting how it supports the chosen developmental area.
+    Ensure the materials are common household items and the instructions are easy for a parent to follow.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: responseSchema,
+      },
+    });
+
+    const text = response.text.trim();
+    const activities = JSON.parse(text);
+    return activities as Activity[];
+
+  } catch (error) {
+    console.error("Error generating activities:", error);
+    throw new Error("Failed to generate activities. The AI may be experiencing high demand. Please try again later.");
+  }
+};

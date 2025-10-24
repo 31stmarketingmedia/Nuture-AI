@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nurture AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Nunito', 'sans-serif'],
+            },
+            colors: {
+              'brand-primary': '#3B82F6', // Blue for buttons/accents
+              'brand-secondary': '#14B8A6', // Teal for icons/accents
+              'accent-yellow': '#FBBF24',
+              'accent-pink': '#F472B6',
+              'bg-light': '#FFFFFF', // Set main background to white
+              'text-dark': '#1F2937', // Main text color (near black)
+              'text-medium': '#4B5563', // Secondary text color (dark gray)
+            },
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.27.0"
+  }
+}
+</script>
+<style>
+    body {
+        background-color: #FFFFFF;
+    }
+</style>
+</head>
+  <body class="bg-bg-light">
+    <div id="root"></div>
+  </body>
+</html>
