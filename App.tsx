@@ -5,6 +5,18 @@ import ActivityCard from './components/ActivityCard';
 import { generateActivities } from './services/geminiService';
 import { Activity } from './types';
 import { SKILL_OPTIONS } from './constants';
+import LiveChat from './components/LiveChat';
+import ImageGenerator from './components/ImageGenerator';
+import ImageEditor from './components/ImageEditor';
+
+const MicIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3zm0 12a5 5 0 0 1-5-5V5a5 5 0 0 1 10 0v6a5 5 0 0 1-5 5z"/>
+        <path d="M19 11a1 1 0 0 1 2 0v1a7 7 0 0 1-14 0v-1a1 1 0 0 1 2 0v1a5 5 0 0 0 10 0v-1z"/>
+        <path d="M12 19a1 1 0 0 1-1 1H5a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1z"/>
+    </svg>
+);
+
 
 const App: React.FC = () => {
   const [ageYears, setAgeYears] = useState<string>('0');
@@ -15,6 +27,8 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [isChatVisible, setIsChatVisible] = useState<boolean>(false);
+
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +80,15 @@ const App: React.FC = () => {
             />
         </section>
 
-        <section id="results-section">
+        <section id="image-generator-section" className="mb-8 md:mb-12">
+            <ImageGenerator />
+        </section>
+        
+        <section id="image-editor-section">
+            <ImageEditor />
+        </section>
+
+        <section id="results-section" className="mt-8 md:mt-12">
             {error && (
                 <div className="text-center p-6 bg-red-100 border-2 border-red-300 text-red-800 rounded-lg">
                     <h3 className="font-bold">Oops! Something went wrong.</h3>
@@ -104,6 +126,17 @@ const App: React.FC = () => {
       <footer className="text-center py-6 text-sm text-gray-500">
         <p>Powered by Gemini. Designed for happy parents.</p>
       </footer>
+
+       {isChatVisible && <LiveChat onClose={() => setIsChatVisible(false)} />}
+      
+       <button
+        onClick={() => setIsChatVisible(true)}
+        className="fixed bottom-6 right-6 bg-brand-primary text-white p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transform transition-transform duration-200 hover:scale-110"
+        aria-label="Start voice chat with AI assistant"
+      >
+        <MicIcon />
+      </button>
+
     </div>
   );
 };
