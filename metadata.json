@@ -1,7 +1,5 @@
 {
-  "name": "Nurture AI",
-  "description": "An AI-powered guide for parents, offering fun, educational, and tailored activities to support their child's development from 0-12 years, with special consideration for children with unique needs.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
+  "name": "Nurture AI Planner",
+  "description": "An AI-powered planner for parents, offering fun, educational, and tailored activity schedules to support their child's development from 0-12 years, with special consideration for children with unique needs.",
+  "requestFramePermissions": []
 }

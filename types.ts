@@ -5,3 +5,14 @@ export interface Activity {
   instructions: string[];
   developmentalBenefit: string;
 }
+
+export interface TimeSlot {
+  time: string;
+  activityName: string;
+  description: string;
+}
+
+export interface Plan {
+  title: string;
+  schedule: TimeSlot[];
+}
