@@ -21,7 +21,8 @@ const ActivityCard: React.FC<ActivityCardProps> = ({ activity, onAddToPlan, isSe
     };
 
     // Fix: Refactor Section props to a type alias to avoid potential type inference issues.
-    type SectionProps = { title: string; id: string; children: React.ReactNode; };
+    // Fix: Made children optional to resolve TS error.
+    type SectionProps = { title: string; id: string; children?: React.ReactNode; };
 
     const Section = ({ title, id, children }: SectionProps) => (
         <div className="border-t border-gray-200">

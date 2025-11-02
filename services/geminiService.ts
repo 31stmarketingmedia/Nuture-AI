@@ -1,4 +1,3 @@
-// Fix: Import Modality from @google/genai
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { Activity, Plan } from '../types';
 
@@ -184,7 +183,6 @@ export const generatePlan = async (activities: Activity[], ageYears: string, age
     }
 };
 
-// Fix: Add generateImage function
 export const generateImage = async (prompt: string, aspectRatio: string): Promise<string> => {
   try {
     const response = await ai.models.generateImages({
@@ -210,7 +208,6 @@ export const generateImage = async (prompt: string, aspectRatio: string): Promis
   }
 };
 
-// Fix: Add editImage function
 export const editImage = async (base64ImageData: string, mimeType: string, prompt: string): Promise<string> => {
     try {
         const response = await ai.models.generateContent({
